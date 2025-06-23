@@ -49,9 +49,6 @@ cover/
 .pybuilder/
 target/
 
-# UV
-uv.lock
-
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
 
