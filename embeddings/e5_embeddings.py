@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any
 
 from langchain.embeddings.base import Embeddings
@@ -5,11 +6,11 @@ from sentence_transformers import SentenceTransformer
 
 
 class E5Embeddings(Embeddings):
-    def __init__(self, model_path: str = "./models/multilingual-e5-large", **kwargs: Any) -> None:
+    def __init__(self, model_name: str = 'multilingual-e5-large', **kwargs: Any) -> None:
         """Initialize the E5 embeddings model"""
         super().__init__(**kwargs)
 
-        self.model = SentenceTransformer(model_path)
+        self.model = SentenceTransformer(str(Path(__file__).parent.parent / 'models' / model_name))
 
     def embed_documents(self, texts: list[str]) -> list[list[float]]:
         """Embed search docs.
@@ -21,7 +22,7 @@ class E5Embeddings(Embeddings):
             List of embeddings.
         """
         # Add passage prefix for documents as recommended by E5
-        prefixed_texts = [f"passage: {text}" for text in texts]
+        prefixed_texts = [f'passage: {text}' for text in texts]
         embeddings = self.model.encode(prefixed_texts, convert_to_numpy=True)
         return embeddings.tolist()
 
@@ -35,7 +36,7 @@ class E5Embeddings(Embeddings):
             Embedding.
         """
         # Add query prefix as recommended by E5
-        prefixed_text = f"query: {text}"
+        prefixed_text = f'query: {text}'
         embedding = self.model.encode([prefixed_text], convert_to_numpy=True)
         return embedding[0].tolist()
 
